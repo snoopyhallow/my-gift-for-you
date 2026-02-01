@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Love 💖</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- BACKGROUND MUSIC -->
+<audio id="bgMusic" loop>
+    <source src="love.mp3" type="audio/mpeg">
+</audio>
+
+<!-- LANDING PAGE -->
+<div id="landing">
+    <h1>💘 HAPPY VALENTINES DAY!! 💘</h1>
+    <h2>💘 Do you want to open it? 💘</h2>
+    <p id="noMessage"></p>
+    <div class="button-container">
+        <button id="yesBtn">YES 💖</button>
+        <button id="noBtn">NO 😈</button>
+    </div>
+</div>
+
+<!-- LOVE PAGE -->
+<div id="lovePage" class="hidden">
+    <h1 class="love-text">I love you endlessly 💕</h1>
+
+    <p class="sub-text">
+        You are my happiness, my peace, and my forever.
+        Happy Valentine's Day 🌹
+    </p>
+
+    <!-- FLOWERS CONTAINER -->
+    <div class="flowers-wrapper">
+        <!-- LEFT FLOWER -->
+        <div class="flower-container">
+            <div class="flower">
+                <div class="petal petal1" data-img="photo6.png"></div>
+                <div class="petal petal2" data-img="photo7.png"></div>
+                <div class="petal petal3" data-img="photo8.jpg"></div>
+                <div class="petal petal4" data-img="photo9.jpg"></div>
+                <div class="petal petal5" data-img="photo10.jpg"></div>
+                <div class="center"></div>
+            </div>
+        </div>
+
+        <!-- MIDDLE FLOWER (ORIGINAL) -->
+        <div class="flower-container">
+            <div class="flower">
+                <div class="petal petal1" data-img="photo1.jpg"></div>
+                <div class="petal petal2" data-img="photo2.jpg"></div>
+                <div class="petal petal3" data-img="photo3.jpg"></div>
+                <div class="petal petal4" data-img="photo4.png"></div>
+                <div class="petal petal5" data-img="photo5.jpg"></div>
+                <div class="center"></div>
+            </div>
+        </div>
+
+        <!-- RIGHT FLOWER -->
+        <div class="flower-container">
+            <div class="flower">
+                <div class="petal petal1" data-img="photo11.png"></div>
+                <div class="petal petal2" data-img="photo12.png"></div>
+                <div class="petal petal3" data-img="photo13.png"></div>
+                <div class="petal petal4" data-img="photo14.png"></div>
+                <div class="petal petal5" data-img="photo15.png"></div>
+                <div class="center"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- IMAGE MODAL -->
+    <div id="imageModal" class="modal hidden">
+        <span class="close">&times;</span>
+        
+        <!-- LOVE POTION ZOOM CONTROL -->
+        <div id="zoomControl" class="zoom-control hidden">
+            <div class="potion-bottle">
+                <div class="potion-label">💕 Love Zoom 💕</div>
+                <div class="zoom-percentage">100%</div>
+                <div class="potion-liquid">
+                    <div class="liquid-fill"></div>
+                    <div class="bubbles">
+                        <span class="bubble"></span>
+                        <span class="bubble"></span>
+                        <span class="bubble"></span>
+                    </div>
+                </div>
+                <input type="range" id="zoomSlider" min="0" max="100" value="100" step="1" class="zoom-slider">
+                <div class="zoom-labels">
+                    <span>0%</span>
+                    <span>50%</span>
+                    <span>100%</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chocolate-box">
+            <div class="box-lid"></div>
+            <div class="box-bottom">
+                <div class="image-wrapper">
+                    <img id="modalImage" src="" class="modal-img">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MINI GAME MODAL -->
+    <div id="miniGameModal" class="modal hidden">
+        <div class="minigame-container">
+            <h2 class="minigame-title">💖 LOVE CATCHER 💖</h2>
+            <p class="minigame-instructions">Catch 10 hearts to unlock the next flower!</p>
+            <div class="minigame-stats">
+                <div class="stat">Hearts: <span id="heartsCollected">0</span>/10</div>
+                <div class="stat">Time: <span id="gameTimer">30</span>s</div>
+            </div>
+            <div id="gameCanvas" class="game-canvas">
+                <div id="catcher" class="catcher">💝</div>
+            </div>
+            <div class="minigame-message hidden" id="gameMessage"></div>
+        </div>
+    </div>
+
+    <!-- SECRET MESSAGE PROMPT -->
+    <div id="secretPrompt" class="secret-prompt hidden">
+        <div class="secret-prompt-box">
+            <h2 class="secret-prompt-title">💝 A Secret Message Awaits 💝</h2>
+            <p class="secret-prompt-text">You've unlocked everything...<br>Do you want to see what's in my heart?</p>
+            <button id="openSecretBtn" class="secret-btn">Open My Heart 💖</button>
+        </div>
+    </div>
+
+    <!-- SECRET MESSAGE MODAL -->
+    <div id="secretMessage" class="secret-message-modal hidden">
+        <div class="secret-close">×</div>
+        <div class="secret-content">
+            <div class="butterflies-container">
+                <span class="butterfly-float">🦋</span>
+                <span class="butterfly-float">🦋</span>
+                <span class="butterfly-float">🦋</span>
+                <span class="butterfly-float">🦋</span>
+                <span class="butterfly-float">🦋</span>
+                <span class="butterfly-float">🦋</span>
+            </div>
+            <div class="hearts-float-container">
+                <span class="heart-float">💖</span>
+                <span class="heart-float">💕</span>
+                <span class="heart-float">💗</span>
+                <span class="heart-float">💓</span>
+                <span class="heart-float">💝</span>
+                <span class="heart-float">❤️</span>
+                <span class="heart-float">💖</span>
+                <span class="heart-float">💕</span>
+            </div>
+            <div class="message-box">
+                <h1 class="message-title">To My Everything 💖</h1>
+                <div class="message-text">
+                    <p>Every moment with you feels like a beautiful dream I never want to wake up from.</p>
+                    
+                    <p>You are my happiness, my peace, my home. In a world full of chaos, you are my calm. In moments of doubt, you are my certainty.</p>
+                    
+                    <p>I am so incredibly grateful for every laugh we share, every adventure we take, every quiet moment when it's just us. You make the ordinary feel extraordinary.</p>
+                    
+                    <p>I'm the luckiest person alive to have you by my side. Your smile lights up my darkest days, your touch makes everything feel right, and your love makes me want to be the best version of myself.</p>
+                    
+                    <p>Thank you for choosing me, for believing in us, for being patient with me, and for loving me the way you do.</p>
+                    
+                    <p>I wish for a thousand tomorrows with you. I wish for endless laughter, countless adventures, and a lifetime of making memories together.</p>
+                    
+                    <p>This isn't just a moment, or a phase, or a feeling that will fade. This is forever. You and me. Always.</p>
+                    
+                    <p class="message-signature">I love you more than words could ever express.<br>Today, tomorrow, and for all the days to come.<br><br>Forever yours,<br>💝</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
