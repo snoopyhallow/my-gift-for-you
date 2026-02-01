@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+html {
+    scroll-behavior: smooth;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -8,7 +12,7 @@
 }
 
 body {
-    height: 100vh;
+    min-height: 100vh;
     background: 
         repeating-linear-gradient(
             0deg,
@@ -53,6 +57,7 @@ body::before {
     text-align: center;
     z-index: 10;
     position: relative;
+    padding: 20px;
 }
 
 #landing h1 {
@@ -162,11 +167,29 @@ button:active {
 }
 
 #lovePage {
+    width: 100%;
+    min-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    z-index: 5;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#lovePage::-webkit-scrollbar {
+    display: none;
+}
+
+.love-page-content {
     text-align: center;
     color: white;
     animation: fadeIn 2s ease;
-    position: relative;
-    z-index: 5;
+    padding: 40px 20px 60px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .love-text {
@@ -177,29 +200,34 @@ button:active {
         -2px -2px 0px rgba(255, 105, 180, 0.9);
     letter-spacing: 3px;
     line-height: 1.8;
+    margin-bottom: 20px;
 }
 
 .sub-text {
     font-size: 0.8rem;
-    margin-top: 30px;
+    margin-top: 10px;
     margin-bottom: 40px;
     text-shadow: 2px 2px 0px #c44569;
     line-height: 1.8;
     letter-spacing: 1px;
+    max-width: 90%;
 }
 
-/* FLOWERS WRAPPER */
 .flowers-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 100px;
-    margin-top: 50px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 0 20px;
 }
 
 /* TREASURE CHEST */
 .treasure-chest-container {
-    margin-top: 60px;
+    margin-top: 40px;
+    margin-bottom: 40px;
     text-align: center;
     position: relative;
     animation: fadeIn 1.5s ease;
@@ -330,6 +358,7 @@ button:active {
 /* FLOWER */
 .flower-container {
     perspective: 1000px;
+    margin: 20px 0;
 }
 
 .flower {
@@ -399,7 +428,6 @@ button:active {
         inset -2px -2px 0px rgba(0, 0, 0, 0.3);
 }
 
-/* FLOWER PETALS - REALISTIC POSITION */
 .petal1 {
     transform: translate(-50%, -50%) rotate(0deg) translateY(-120px);
     animation: petalAppear 0.8s ease 0.2s forwards;
@@ -532,6 +560,7 @@ button:active {
     position: relative;
 }
 
+/* FIXED: HIGH QUALITY IMAGE RENDERING - NO MORE PIXELATION */
 .modal-img {
     max-width: 90%;
     max-height: 90%;
@@ -547,8 +576,17 @@ button:active {
     position: relative;
     user-select: none;
     -webkit-user-drag: none;
-    image-rendering: auto;
+    
+    /* HIGH QUALITY RENDERING - PREVENTS PIXELATION */
     image-rendering: -webkit-optimize-contrast;
+    image-rendering: high-quality;
+    -ms-interpolation-mode: bicubic;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transform-origin: center center;
+    will-change: transform;
 }
 
 .modal-img.revealed {
@@ -803,7 +841,6 @@ button:active {
     letter-spacing: 1px;
 }
 
-/* FLOATING EMOJIS */
 span {
     pointer-events: none;
 }
@@ -826,6 +863,7 @@ span {
     align-items: center;
     z-index: 2000;
     overflow: hidden;
+    padding: 20px;
 }
 
 .secret-content {
@@ -1451,68 +1489,107 @@ span {
     }
 }
 
-/* MOBILE */
+/* MOBILE RESPONSIVE */
 @media (max-width: 768px) {
+    body {
+        min-height: 100vh;
+        height: auto;
+    }
+
+    #landing {
+        padding: 20px 15px;
+    }
+
     #landing h1 {
-        font-size: 1.2rem;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
     }
 
     #landing h2 {
-        font-size: 1rem;
+        font-size: 0.8rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
     }
 
     #noMessage {
-        font-size: 0.7rem;
-        line-height: 1.6;
+        font-size: 0.6rem;
+        line-height: 1.5;
+        min-height: 50px;
     }
 
     .love-text {
-        font-size: 1.3rem;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 15px;
+        padding: 0 10px;
     }
 
     .sub-text {
-        font-size: 0.6rem;
+        font-size: 0.55rem;
+        line-height: 1.6;
+        margin-bottom: 30px;
     }
 
     .flowers-wrapper {
         flex-direction: column;
-        gap: 50px;
+        gap: 30px;
+        margin: 20px 0;
+        padding: 0 10px;
+    }
+
+    .flower-container {
+        margin: 15px 0;
     }
 
     .flower {
-        width: 300px;
-        height: 300px;
+        width: 250px;
+        height: 250px;
+    }
+
+    .center {
+        width: 50px;
+        height: 50px;
     }
 
     .petal {
-        width: 90px;
-        height: 140px;
+        width: 75px;
+        height: 115px;
     }
 
-    .petal1 { transform: translate(-50%, -50%) rotate(0deg) translateY(-90px); }
-    .petal2 { transform: translate(-50%, -50%) rotate(72deg) translateY(-90px); }
-    .petal3 { transform: translate(-50%, -50%) rotate(144deg) translateY(-90px); }
-    .petal4 { transform: translate(-50%, -50%) rotate(216deg) translateY(-90px); }
-    .petal5 { transform: translate(-50%, -50%) rotate(288deg) translateY(-90px); }
+    .petal1 { transform: translate(-50%, -50%) rotate(0deg) translateY(-75px); }
+    .petal2 { transform: translate(-50%, -50%) rotate(72deg) translateY(-75px); }
+    .petal3 { transform: translate(-50%, -50%) rotate(144deg) translateY(-75px); }
+    .petal4 { transform: translate(-50%, -50%) rotate(216deg) translateY(-75px); }
+    .petal5 { transform: translate(-50%, -50%) rotate(288deg) translateY(-75px); }
+
+    .flower-locked::after {
+        font-size: 2.5rem;
+    }
 
     .button-container {
         gap: 20px;
-        height: 180px;
+        height: 150px;
+        flex-wrap: wrap;
     }
 
     button {
-        padding: 12px 30px;
+        padding: 12px 25px;
         font-size: 0.7rem;
     }
 
     .chocolate-box {
-        width: 300px;
-        height: 300px;
+        width: 280px;
+        height: 280px;
+    }
+
+    .box-lid::before {
+        font-size: 2rem;
     }
 
     .close {
-        right: 20px;
-        top: 20px;
+        right: 15px;
+        top: 15px;
         font-size: 2rem;
         padding: 15px;
         min-width: 50px;
@@ -1522,18 +1599,16 @@ span {
         justify-content: center;
     }
     
-    /* Mobile zoom control - compact top right position */
     .zoom-control {
         left: auto;
-        right: 10px;
+        right: 15px;
         top: 80px;
         transform: none;
-        bottom: auto;
     }
 
     .potion-bottle {
-        width: 90px;
-        padding: 10px;
+        width: 100px;
+        padding: 12px;
     }
 
     .potion-label {
@@ -1543,28 +1618,28 @@ span {
     }
 
     .zoom-percentage {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         margin-bottom: 8px;
     }
 
     .potion-liquid {
-        width: 60px;
-        height: 80px;
-        margin-bottom: 10px;
+        width: 65px;
+        height: 90px;
+        margin-bottom: 12px;
     }
 
     .zoom-slider {
-        height: 8px;
+        height: 10px;
     }
 
     .zoom-slider::-webkit-slider-thumb {
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
     }
 
     .zoom-slider::-moz-range-thumb {
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
     }
 
     .zoom-labels {
@@ -1577,30 +1652,33 @@ span {
         height: 6px;
     }
 
-    /* Mini game mobile styles */
     .minigame-container {
-        padding: 15px;
+        padding: 20px 15px;
+        width: 95%;
     }
 
     .minigame-title {
-        font-size: 1rem;
-        line-height: 1.6;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 12px;
     }
 
     .minigame-instructions {
         font-size: 0.5rem;
         margin-bottom: 15px;
+        line-height: 1.5;
     }
 
     .minigame-stats {
-        flex-direction: column;
+        flex-direction: row;
         gap: 10px;
         margin-bottom: 15px;
     }
 
     .stat {
-        font-size: 0.6rem;
-        padding: 8px 15px;
+        font-size: 0.55rem;
+        padding: 8px 12px;
+        flex: 1;
     }
 
     .game-canvas {
@@ -1608,23 +1686,24 @@ span {
     }
 
     .catcher {
-        font-size: 2rem;
+        font-size: 2.5rem;
     }
 
     .falling-item {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
     }
 
     .minigame-message {
         font-size: 0.6rem;
-        padding: 10px;
+        padding: 12px;
+        line-height: 1.5;
     }
 
-    .flower-locked::after {
-        font-size: 3rem;
+    .treasure-chest-container {
+        margin-top: 30px;
+        margin-bottom: 50px;
     }
 
-    /* Treasure chest mobile */
     .treasure-chest {
         width: 150px;
         height: 120px;
@@ -1639,7 +1718,7 @@ span {
     }
 
     .chest-lock {
-        font-size: 2rem;
+        font-size: 2.5rem;
     }
 
     .chest-label {
@@ -1657,25 +1736,35 @@ span {
         }
     }
 
-    /* Secret message mobile adjustments */
+    .secret-message-modal {
+        padding: 15px;
+    }
+
     .message-box {
-        padding: 20px;
-        max-width: 90%;
+        padding: 25px 20px;
+        max-width: 95%;
         max-height: 80vh;
     }
 
     .message-title {
-        font-size: 1.2rem;
-        line-height: 1.6;
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 20px;
     }
 
     .message-text {
-        font-size: 0.55rem;
+        font-size: 0.5rem;
         line-height: 1.8;
     }
 
+    .message-text p {
+        margin-bottom: 18px;
+    }
+
     .message-signature {
-        font-size: 0.6rem;
+        font-size: 0.55rem;
+        margin-top: 25px;
+        padding-top: 20px;
     }
 
     .secret-close {
@@ -1688,5 +1777,81 @@ span {
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    .butterfly-float {
+        font-size: 1.8rem;
+    }
+
+    .heart-float {
+        font-size: 1.2rem;
+    }
+
+    #lovePage {
+        height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .love-page-content {
+        padding: 30px 15px 80px;
+        min-height: auto;
+    }
+}
+
+@media (max-width: 380px) {
+    #landing h1 {
+        font-size: 0.85rem;
+    }
+
+    #landing h2 {
+        font-size: 0.7rem;
+    }
+
+    .love-text {
+        font-size: 0.85rem;
+    }
+
+    .sub-text {
+        font-size: 0.5rem;
+    }
+
+    .flower {
+        width: 220px;
+        height: 220px;
+    }
+
+    .petal {
+        width: 65px;
+        height: 100px;
+    }
+
+    .petal1 { transform: translate(-50%, -50%) rotate(0deg) translateY(-65px); }
+    .petal2 { transform: translate(-50%, -50%) rotate(72deg) translateY(-65px); }
+    .petal3 { transform: translate(-50%, -50%) rotate(144deg) translateY(-65px); }
+    .petal4 { transform: translate(-50%, -50%) rotate(216deg) translateY(-65px); }
+    .petal5 { transform: translate(-50%, -50%) rotate(288deg) translateY(-65px); }
+
+    .chocolate-box {
+        width: 240px;
+        height: 240px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 0.6rem;
+    }
+
+    .minigame-title {
+        font-size: 0.75rem;
+    }
+
+    .message-title {
+        font-size: 0.85rem;
+    }
+
+    .message-text {
+        font-size: 0.45rem;
     }
 }
