@@ -36,12 +36,30 @@ function unlockNextFlower() {
         flowerContainers[currentFlowerIndex].classList.remove('flower-locked');
         
         if (currentFlowerIndex === 2) {
-            // All flowers unlocked - show secret message prompt after delay
+            // All flowers unlocked - unlock the treasure chest!
             setTimeout(() => {
-                showSecretPrompt();
-            }, 2000);
+                unlockTreasureChest();
+            }, 1500);
         }
     }
+}
+
+// Unlock treasure chest
+function unlockTreasureChest() {
+    const treasureContainer = document.getElementById('treasureChestContainer');
+    const treasureChest = document.getElementById('treasureChest');
+    
+    // Remove locked state
+    treasureContainer.classList.remove('treasure-locked');
+    treasureChest.classList.add('unlocked');
+    
+    // Play unlock animation
+    treasureChest.style.animation = 'treasureUnlock 1s ease';
+    
+    // Show sparkle effect or notification
+    setTimeout(() => {
+        alert('✨ The Secret Treasure has been unlocked! Click on it to reveal what\'s inside... 💖');
+    }, 1000);
 }
 
 // Initialize flowers when love page loads
@@ -165,6 +183,12 @@ const zoomControl = document.getElementById('zoomControl');
 const zoomSlider = document.getElementById('zoomSlider');
 const liquidFill = document.querySelector('.liquid-fill');
 const zoomPercentageDisplay = document.querySelector('.zoom-percentage');
+
+// SECRET MESSAGE ELEMENTS (declared here for ESC handler)
+const secretMessage = document.getElementById('secretMessage');
+const secretClose = document.querySelector('.secret-close');
+const treasureChest = document.getElementById('treasureChest');
+const chestLid = document.querySelector('.chest-lid');
 
 let boxOpened = false;
 let zoomLevel = 1; // Start at 1x (100%)
@@ -361,7 +385,44 @@ modalImg.addEventListener('touchend', () => {
     isPanning = false;
 });
 
-closeBtn.addEventListener('click', () => {
+closeBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const flowerIndex = parseInt(modal.dataset.currentFlower || '0');
+    
+    modal.classList.add('hidden');
+    zoomControl.classList.add('hidden');
+    boxOpened = false;
+    zoomLevel = 1;
+    zoomSlider.value = 100;
+    zoomPercentageDisplay.textContent = '100%';
+    updateLiquidFill(100);
+    translateX = 0;
+    translateY = 0;
+    modalImg.classList.remove('zoom-1-5x');
+    modalImg.classList.add('zoom-1x');
+    modalImg.style.transform = 'scale(1) translate(0, 0)';
+    modalImg.style.opacity = '1';
+
+    // Check if current flower is completed
+    if (checkFlowerCompletion(flowerIndex) && !completedFlowers.includes(flowerIndex)) {
+        completedFlowers.push(flowerIndex);
+        
+        // Show mini game if not the last flower or not all unlocked
+        if (flowerIndex < 2) {
+            setTimeout(() => {
+                startMiniGame();
+            }, 500);
+        }
+    }
+});
+
+// Add touch support for close button on mobile
+closeBtn.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
     const flowerIndex = parseInt(modal.dataset.currentFlower || '0');
     
     modal.classList.add('hidden');
@@ -393,6 +454,21 @@ closeBtn.addEventListener('click', () => {
 
 // ESC key to close modal or reset zoom
 document.addEventListener('keydown', (e) => {
+    // Check if secret message is open first (highest priority)
+    if (e.key === 'Escape' && !secretMessage.classList.contains('hidden')) {
+        secretMessage.classList.add('hidden');
+        
+        // Close chest lid
+        chestLid.classList.remove('opened');
+        
+        // Restore music volume
+        if (music && !music.paused) {
+            music.volume = 0.5;
+        }
+        return; // Exit early to prevent other handlers
+    }
+    
+    // Then check if image modal is open
     if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
         if (zoomLevel !== 1) {
             // First ESC: reset zoom to 100%
@@ -650,24 +726,22 @@ document.addEventListener('keydown', (e) => {
 });
 
 /* SECRET MESSAGE FEATURE */
-const secretPrompt = document.getElementById('secretPrompt');
-const secretMessage = document.getElementById('secretMessage');
-const openSecretBtn = document.getElementById('openSecretBtn');
-const secretClose = document.querySelector('.secret-close');
-
-// Show secret prompt
-function showSecretPrompt() {
-    secretPrompt.classList.remove('hidden');
-}
-
-// Open secret message
-openSecretBtn.addEventListener('click', () => {
-    secretPrompt.classList.add('hidden');
-    secretMessage.classList.remove('hidden');
-    
-    // Play special sound effect if music is available
-    if (music && !music.paused) {
-        music.volume = 0.3; // Lower music volume for dramatic effect
+// Open treasure chest and show secret message
+treasureChest.addEventListener('click', () => {
+    // Only open if unlocked
+    if (treasureChest.classList.contains('unlocked')) {
+        // Open the chest lid
+        chestLid.classList.add('opened');
+        
+        // Show secret message after chest opens
+        setTimeout(() => {
+            secretMessage.classList.remove('hidden');
+            
+            // Lower music volume for dramatic effect
+            if (music && !music.paused) {
+                music.volume = 0.3;
+            }
+        }, 800);
     }
 });
 
@@ -675,20 +749,27 @@ openSecretBtn.addEventListener('click', () => {
 secretClose.addEventListener('click', () => {
     secretMessage.classList.add('hidden');
     
+    // Close chest lid
+    chestLid.classList.remove('opened');
+    
     // Restore music volume
     if (music && !music.paused) {
         music.volume = 0.5;
     }
 });
 
-// ESC to close secret message
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !secretMessage.classList.contains('hidden')) {
-        secretMessage.classList.add('hidden');
-        
-        // Restore music volume
-        if (music && !music.paused) {
-            music.volume = 0.5;
-        }
+// Add touch support for secret close button on mobile
+secretClose.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    secretMessage.classList.add('hidden');
+    
+    // Close chest lid
+    chestLid.classList.remove('opened');
+    
+    // Restore music volume
+    if (music && !music.paused) {
+        music.volume = 0.5;
     }
 });
