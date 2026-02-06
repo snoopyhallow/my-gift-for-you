@@ -3,6 +3,7 @@ const yesBtn = document.getElementById("yesBtn");
 const landing = document.getElementById("landing");
 const lovePage = document.getElementById("lovePage");
 const music = document.getElementById("bgMusic");
+const chestMusic = document.getElementById("chestMusic");
 const noMessage = document.getElementById("noMessage");
 
 let noClickCount = 0;
@@ -87,19 +88,19 @@ noBtn.addEventListener("click", (e) => {
     
     if (noClickCount === 1) {
         noMessage.textContent = "Are you sure? 🥺";
-        noBtn.style.animation = "shake 1.2s";
+        noBtn.style.animation = "shake 1.5s";
         setTimeout(() => noBtn.style.animation = "", 500);
     } else if (noClickCount === 2) {
         noMessage.textContent = "Are you really sure about this? 😢";
-        noBtn.style.animation = "shake 1.2s";
+        noBtn.style.animation = "shake 1.5s";
         setTimeout(() => noBtn.style.animation = "", 500);
     } else if (noClickCount === 3) {
         noMessage.textContent = "Are you absolutely positive? 😭";
-        noBtn.style.animation = "shake 1.2s";
+        noBtn.style.animation = "shake 1.5s";
         setTimeout(() => noBtn.style.animation = "", 500);
     } else if (noClickCount === 4) {
         noMessage.textContent = "Final answer??? 😭";
-        noBtn.style.animation = "shake 1.2s";
+        noBtn.style.animation = "shake 1.5s";
         setTimeout(() => noBtn.style.animation = "", 500);     
     } else if (noClickCount === 5) {
         noMessage.textContent = "Fine, I give up… 💔 You leave me no choice.";
@@ -159,14 +160,34 @@ function dodge(e) {
 document.addEventListener("mousemove", dodge);
 document.addEventListener("touchmove", dodge);
 
-/* YES CLICK */
+/* YES CLICK - WITH MUSIC FADE IN */
 yesBtn.addEventListener("click", () => {
     landing.style.animation = "fadeOut 1s forwards";
     setTimeout(() => {
         landing.style.display = "none";
         lovePage.classList.remove("hidden");
-        music.volume = 0.5; // Set volume to 50%
+        
+        // Start music with fade in transition
+        music.volume = 0; // Start at 0
         music.play();
+        
+        // Fade in music over 3 seconds
+        let targetVolume = 0.5;
+        let currentVolume = 0;
+        let fadeInDuration = 3000; // 3 seconds
+        let fadeInSteps = 60; // 60 steps for smooth transition
+        let volumeIncrement = targetVolume / fadeInSteps;
+        let stepDuration = fadeInDuration / fadeInSteps;
+        
+        let fadeInInterval = setInterval(() => {
+            currentVolume += volumeIncrement;
+            if (currentVolume >= targetVolume) {
+                currentVolume = targetVolume;
+                clearInterval(fadeInInterval);
+            }
+            music.volume = currentVolume;
+        }, stepDuration);
+        
         initializeFlowers(); // Initialize flower locks
     }, 1000);
 });
@@ -461,10 +482,8 @@ document.addEventListener('keydown', (e) => {
         // Close chest lid
         chestLid.classList.remove('opened');
         
-        // Restore music volume
-        if (music && !music.paused) {
-            music.volume = 0.5;
-        }
+        // Switch back to background music with fade
+        switchToBackgroundMusic();
         return; // Exit early to prevent other handlers
     }
     
@@ -725,6 +744,90 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+/* MUSIC SWITCHING FUNCTIONS */
+function switchToChestMusic() {
+    // Fade out background music
+    let fadeOutDuration = 1500; // 1.5 seconds
+    let fadeOutSteps = 30;
+    let currentBgVolume = music.volume;
+    let volumeDecrement = currentBgVolume / fadeOutSteps;
+    let stepDuration = fadeOutDuration / fadeOutSteps;
+    
+    let fadeOutInterval = setInterval(() => {
+        currentBgVolume -= volumeDecrement;
+        if (currentBgVolume <= 0) {
+            currentBgVolume = 0;
+            music.volume = 0;
+            music.pause();
+            clearInterval(fadeOutInterval);
+            
+            // Start chest music at 0:41 seconds with fade in
+            chestMusic.currentTime = 41; // Start at 41 seconds (0:41)
+            chestMusic.volume = 0;
+            chestMusic.play();
+            
+            let targetVolume = 0.4; // Slightly quieter for dramatic effect
+            let currentVolume = 0;
+            let fadeInDuration = 2000; // 2 seconds
+            let fadeInSteps = 40;
+            let volumeIncrement = targetVolume / fadeInSteps;
+            let stepDuration = fadeInDuration / fadeInSteps;
+            
+            let fadeInInterval = setInterval(() => {
+                currentVolume += volumeIncrement;
+                if (currentVolume >= targetVolume) {
+                    currentVolume = targetVolume;
+                    clearInterval(fadeInInterval);
+                }
+                chestMusic.volume = currentVolume;
+            }, stepDuration);
+        } else {
+            music.volume = currentBgVolume;
+        }
+    }, stepDuration);
+}
+
+function switchToBackgroundMusic() {
+    // Fade out chest music
+    let fadeOutDuration = 1500; // 1.5 seconds
+    let fadeOutSteps = 30;
+    let currentChestVolume = chestMusic.volume;
+    let volumeDecrement = currentChestVolume / fadeOutSteps;
+    let stepDuration = fadeOutDuration / fadeOutSteps;
+    
+    let fadeOutInterval = setInterval(() => {
+        currentChestVolume -= volumeDecrement;
+        if (currentChestVolume <= 0) {
+            currentChestVolume = 0;
+            chestMusic.volume = 0;
+            chestMusic.pause();
+            clearInterval(fadeOutInterval);
+            
+            // Resume background music with fade in
+            music.volume = 0;
+            music.play();
+            
+            let targetVolume = 0.5;
+            let currentVolume = 0;
+            let fadeInDuration = 2000; // 2 seconds
+            let fadeInSteps = 40;
+            let volumeIncrement = targetVolume / fadeInSteps;
+            let stepDuration = fadeInDuration / fadeInSteps;
+            
+            let fadeInInterval = setInterval(() => {
+                currentVolume += volumeIncrement;
+                if (currentVolume >= targetVolume) {
+                    currentVolume = targetVolume;
+                    clearInterval(fadeInInterval);
+                }
+                music.volume = currentVolume;
+            }, stepDuration);
+        } else {
+            chestMusic.volume = currentChestVolume;
+        }
+    }, stepDuration);
+}
+
 /* SECRET MESSAGE FEATURE */
 // Open treasure chest and show secret message
 treasureChest.addEventListener('click', () => {
@@ -733,14 +836,12 @@ treasureChest.addEventListener('click', () => {
         // Open the chest lid
         chestLid.classList.add('opened');
         
+        // Switch to chest music
+        switchToChestMusic();
+        
         // Show secret message after chest opens
         setTimeout(() => {
             secretMessage.classList.remove('hidden');
-            
-            // Lower music volume for dramatic effect
-            if (music && !music.paused) {
-                music.volume = 0.3;
-            }
         }, 800);
     }
 });
@@ -752,10 +853,8 @@ secretClose.addEventListener('click', () => {
     // Close chest lid
     chestLid.classList.remove('opened');
     
-    // Restore music volume
-    if (music && !music.paused) {
-        music.volume = 0.5;
-    }
+    // Switch back to background music
+    switchToBackgroundMusic();
 });
 
 // Add touch support for secret close button on mobile
@@ -768,8 +867,6 @@ secretClose.addEventListener('touchend', (e) => {
     // Close chest lid
     chestLid.classList.remove('opened');
     
-    // Restore music volume
-    if (music && !music.paused) {
-        music.volume = 0.5;
-    }
+    // Switch back to background music
+    switchToBackgroundMusic();
 });
